@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/css/output.css" rel="stylesheet">
+    <title><%= title %></title>
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-blue-600 p-4 text-white flex justify-between items-center">
+        <h1 class="text-xl font-bold">Admin Panel (EMS)</h1>
+        <div>
+            <span class="mr-4">Welcome, <%= user.username %>!</span>
+            <a href="/logout" class="py-2 px-4 bg-red-500 rounded hover:bg-red-600">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-8">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-3xl font-semibold">Manage Exams</h2>
+            <a href="/admin/exams/add" class="py-2 px-4 bg-green-500 text-white rounded hover:bg-green-600">Schedule New Exam</a>
+        </div>
+        
+        <div class="bg-white shadow-md rounded-lg overflow-x-auto">
+            <table class="min-w-full">
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th class="py-3 px-6 text-left">Subject Name</th>
+                        <th class="py-3 px-6 text-left">Code</th>
+                        <th class="py-3 px-6 text-left">Course</th>
+                        <th class="py-3 px-6 text-left">Semester</th>
+                        <th class="py-3 px-6 text-left">Date</th>
+                        <th class="py-3 px-6 text-left">Time</th>
+                        <th class="py-3 px-6 text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    <% exams.forEach(exam => { %>
+                        <tr class="hover:bg-gray-50">
+                            <td class="py-4 px-6"><%= exam.subject_name %></td>
+                            <td class="py-4 px-6"><%= exam.subject_code %></td>
+                            <td class="py-4 px-6"><%= exam.course %></td>
+                            <td class="py-4 px-6"><%= exam.semester %></td>
+                            <td class="py-4 px-6"><%= exam.exam_date %></td>
+                            <td class="py-4 px-6"><%= exam.start_time %></td>
+                            <td class="py-4 px-6 text-center">
+                                <a href="/admin/exams/edit/<%= exam.id %>" class="text-yellow-600 hover:text-yellow-800 mr-4">Edit</a>
+                                <a href="/admin/exams/delete/<%= exam.id %>" class="text-red-600 hover:text-red-800" onclick="return confirm('Pakka delete karna hai?')">Delete</a>
+                            </td>
+                        </tr>
+                    <% }); %>
+                    <% if (exams.length === 0) { %>
+                        <tr>
+                            <td colspan="7" class="py-4 px-6 text-center text-gray-500">No exams scheduled.</td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+        <a href="/admin/dashboard" class="inline-block mt-6 text-blue-600 hover:underline">&larr; Back to Dashboard</a>
+    </div>
+</body>
+</html>

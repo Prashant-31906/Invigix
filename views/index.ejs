@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/css/output.css" rel="stylesheet">
+    <title><%= title %></title>
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    
+    <div class="text-center p-8 bg-white rounded-lg shadow-md">
+        <h1 class="text-4xl font-bold text-blue-600 mb-4">
+            Welcome, <%= user.username %>!
+        </h1>
+        <p class="text-lg text-gray-700">
+            Aapka role hai: <span class="font-semibold capitalize"><%= user.role %></span>
+        </p>
+        <a href="/logout" class="mt-6 inline-block px-6 py-2 text-white bg-red-500 rounded-md hover:bg-red-600">
+            Logout
+        </a>
+    </div>
+
+</body>
+</html>

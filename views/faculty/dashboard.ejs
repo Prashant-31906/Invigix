@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/css/output.css" rel="stylesheet">
+    <title><%= title %></title>
+</head>
+<body class="bg-gray-100">
+
+    <nav class="bg-green-600 p-4 text-white flex justify-between items-center">
+        <h1 class="text-xl font-bold">Faculty Panel (EMS)</h1>
+        <div>
+            <span class="mr-4">Welcome, <%= user.username %>!</span>
+            <a href="/logout" class="py-2 px-4 bg-red-500 rounded hover:bg-red-600">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-8">
+        <h2 class="text-3xl font-semibold mb-6">My Dashboard</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <div class="md:col-span-1 bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-bold mb-4">My Availability</h3>
+                <p class="mb-4 text-gray-700">Apni availability update karein taaki admin duties assign kar sake.</p>
+                
+                <form action="/faculty/availability/toggle" method="POST">
+                    <% if (user.availability_status) { %>
+                        <input type="hidden" name="status" value="false">
+                        <button type="submit" class="w-full py-3 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600 font-semibold">
+                            Mark as ON LEAVE
+                        </button>
+                        <p class="text-sm text-center mt-2 text-green-600">Current Status: Available</p>
+                    <% } else { %>
+                        <input type="hidden" name="status" value="true">
+                        <button type="submit" class="w-full py-3 px-4 bg-green-500 text-white rounded-lg hover:bg-green-600 font-semibold">
+                            Mark as AVAILABLE
+                        </button>
+                        <p class="text-sm text-center mt-2 text-red-600">Current Status: On Leave</p>
+                    <% } %>
+                </form>
+            </div>
+
+            <div class="md:col-span-2 bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-bold mb-4">My Invigilation Duties</h3>
+                
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead class="bg-gray-200">
+                            <tr>
+                                <th class="py-3 px-6 text-left">Date</th>
+                                <th class="py-3 px-6 text-left">Time</th>
+                                <th class="py-3 px-6 text-left">Room</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            <% duties.forEach(duty => { %>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="py-4 px-6"><%= duty.duty_date %></td>
+                                    <td class="py-4 px-6"><%= duty.start_time %></td>
+                                    <td class="py-4 px-6 font-semibold"><%= duty.room_number %></td>
+                                </tr>
+                            <% }); %>
+                            <% if (duties.length === 0) { %>
+                                <tr>
+                                    <td colspan="3" class="py-6 px-6 text-center text-gray-500">
+                                        Aapko abhi koi duty assign nahi hui hai.
+                                    </td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

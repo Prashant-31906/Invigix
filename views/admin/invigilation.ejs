@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/css/output.css" rel="stylesheet">
+    <title><%= title %></title>
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-blue-600 p-4 text-white flex justify-between items-center">
+        <h1 class="text-xl font-bold">Admin Panel (EMS)</h1>
+        <div><span class="mr-4">Welcome, <%= user.username %>!</span><a href="/logout" class="py-2 px-4 bg-red-500 rounded hover:bg-red-600">Logout</a></div>
+    </nav>
+
+    <div class="container mx-auto p-8">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-3xl font-semibold">Generate Invigilation Roster</h2>
+            <a href="/admin/dashboard" class="inline-block text-blue-600 hover:underline">&larr; Back to Dashboard</a>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+            <h3 class="text-xl font-bold mb-4">Select Exam Slot</h3>
+            <form action="/admin/invigilation" method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label for="date" class="block text-sm font-medium text-gray-700">Exam Date</label>
+                    <input type="date" name="date" id="date" value="<%= selectedDate || '' %>" required class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="time" class="block text-sm font-medium text-gray-700">Start Time</label>
+                    <input type="time" name="time" id="time" value="<%= selectedTime || '' %>" required class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div class="flex items-end">
+                    <button type="submit" class="w-full py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700">
+                        View Roster
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <% if (selectedDate && selectedTime) { %>
+        <div class="flex space-x-4 mb-8">
+            <form action="/admin/invigilation/generate" method="POST" class="flex-1">
+                <input type="hidden" name="exam_date" value="<%= selectedDate %>">
+                <input type="hidden" name="start_time" value="<%= selectedTime %>">
+                <button type="submit" class="w-full py-3 px-6 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 font-semibold">
+                    Generate/Re-Generate Roster
+                </button>
+            </form>
+            <form action="/admin/invigilation/clear" method="POST" class="flex-1">
+                <input type="hidden" name="exam_date" value="<%= selectedDate %>">
+                <input type="hidden" name="start_time" value="<%= selectedTime %>">
+                <button type="submit" class="w-full py-3 px-6 bg-red-500 text-white rounded-lg shadow hover:bg-red-600 font-semibold"
+                        onclick="return confirm('Pakka is slot ka poora roster clear karna hai?')">
+                    Clear Roster
+                </button>
+            </form>
+        </div>
+        <% } %>
+
+        <h3 class="text-2xl font-semibold mb-4">Generated Roster</h3>
+        <div class="bg-white shadow-md rounded-lg overflow-x-auto">
+            <table class="min-w-full">
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th class="py-3 px-6 text-left">Room</th>
+                        <th class="py-3 px-6 text-left">Faculty Name</th>
+                        <th class="py-3 px-6 text-left">Department</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    <% duties.forEach(duty => { %>
+                        <tr class="hover:bg-gray-50">
+                            <td class="py-4 px-6 font-semibold"><%= duty.room_number %></td>
+                            <td class="py-4 px-6"><%= duty.faculty_name %></td>
+                            <td class="py-4 px-6"><%= duty.department || '-' %></td>
+                        </tr>
+                    <% }); %>
+                    <% if (duties.length === 0) { %>
+                        <tr>
+                            <td colspan="3" class="py-6 px-6 text-center text-gray-500">
+                                Is slot ke liye koi roster nahi bana. "Generate" par click karke banayein.
+                            </td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
