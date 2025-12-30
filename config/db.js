@@ -6,7 +6,7 @@ const pool = mysql.createPool({
   host: process.env.DB_HOST,       // Render se aayega
   user: process.env.DB_USERNAME,       // Render se aayega
   password: process.env.DB_PASSWORD, // Render se aayega
-  database: process.env.DB_NAME,   // Render se aayega
+  database: process.env.DB_DATABASE,   // Render se aayega
   port: process.env.DB_PORT || 4000, // TiDB ka default port 4000 hota hai
   waitForConnections: true,
   connectionLimit: 10,
