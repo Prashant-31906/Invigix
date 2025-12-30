@@ -1,25 +1,28 @@
 // config/db.js
 const mysql = require('mysql2');
+require('dotenv').config(); // Local testing ke liye
 
-// 'createConnection' ki jagah hum 'createPool' use karenge
-// Ye automatically connections manage karega taaki "Closed State" error na aaye
 const pool = mysql.createPool({
-  host: 'localhost',
-  user: 'root',      // Aapka MySQL username
-  password: 'prashant123@',      // Aapka MySQL password
-  database: 'ems_db',
+  host: process.env.DB_HOST,       // Render se aayega
+  user: process.env.DB_USER,       // Render se aayega
+  password: process.env.DB_PASSWORD, // Render se aayega
+  database: process.env.DB_NAME,   // Render se aayega
+  port: process.env.DB_PORT || 4000, // TiDB ka default port 4000 hota hai
   waitForConnections: true,
-  connectionLimit: 10, // Ek baar me max 10 connections
-  queueLimit: 0
+  connectionLimit: 10,
+  queueLimit: 0,
+  ssl: {
+    minVersion: 'TLSv1.2',
+    rejectUnauthorized: true
+  }
 });
 
-// Pool check karne ke liye (Optional, bas tasalli ke liye)
 pool.getConnection((err, connection) => {
   if (err) {
-    console.error('Database connection fail ho gayi: ' + err.stack);
+    console.error('Database connection fail ho gayi:', err);
   } else {
-    console.log('MySQL Database Connected Successfully (via Pool).');
-    connection.release(); // Connection wapas pool me bhej do
+    console.log('TiDB Cloud Database Connected Successfully!');
+    connection.release();
   }
 });
 
